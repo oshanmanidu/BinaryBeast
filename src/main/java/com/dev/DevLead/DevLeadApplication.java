@@ -1,4 +1,4 @@
-package com.dev.DevLead.DevLead;
+package com.dev.DevLead;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
