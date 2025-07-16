@@ -1,4 +1,4 @@
-package com.dev.DevLead.DevLead;
+package com.dev.DevLead;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
