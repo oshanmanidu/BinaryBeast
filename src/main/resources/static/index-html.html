@@ -231,9 +231,6 @@
             }
         }
     </style>
-
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-
 </head>
 <body>
     <a href="admin-login.html" class="admin-link">Admin Login</a>
@@ -255,23 +252,11 @@
                 Your team is the last hope. Crack the layers of security, rebuild the platform, and restore the OASIS.
             </p>
             
-        <div class="cta-buttons">
-            <a href="team-register.html" class="btn btn-primary">Join the Battle</a>
-            <a href="team-login.html" class="btn btn-secondary">Team Login</a>
-            <a href="leaderboard.html" class="btn btn-outline">View Leaderboard</a>
-
-            <div id="g_id_onload"
-                data-client_id="289898374574-9skmdel580rp3u2usr0bee0elshu5qd7.apps.googleusercontent.com"
-                data-callback="handleCredentialResponse"
-                data-auto_prompt="false">
+            <div class="cta-buttons">
+                <a href="team-register.html" class="btn btn-primary">Join the Battle</a>
+                <a href="team-login.html" class="btn btn-secondary">Team Login</a>
+                <a href="leaderboard.html" class="btn btn-outline">View Leaderboard</a>
             </div>
-
-            <div class="g_id_signin"
-                data-type="standard"
-                data-size="large">
-            </div>
-        </div>
-
         </section>
         
         <section class="countdown">
@@ -304,7 +289,7 @@
             </div>
             
             <div class="feature-card">
-                <div class="feature-icon">🏗️</div>
+                <div class="feature-icon">🏗</div>
                 <h3>Buildathon Projects</h3>
                 <p>Once you crack the algorithmic code, build innovative solutions to restore OASIS functionality. Submit your GitHub repositories.</p>
             </div>
@@ -351,33 +336,6 @@
         // Update countdown every second
         setInterval(updateCountdown, 1000);
         updateCountdown();
-
-        function handleCredentialResponse(response) {
-        const idToken = response.credential;
-
-        // Optional: decode token for user info (client-side only)
-        const payload = JSON.parse(atob(idToken.split('.')[1]));
-        console.log("Google User:", payload);
-
-        // Send token to your Spring Boot backend
-        fetch('http://localhost:8080/api/auth/google', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ token: idToken })
-            })
-            .then(res => res.text())
-            .then(data => {
-            console.log("Backend Response:", data);
-            // Optionally redirect to dashboard
-            // window.location.href = "/dashboard.html";
-            })
-            .catch(err => {
-            console.error("Login failed:", err);
-            });
-        }
     </script>
-
 </body>
 </html>
