@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OASIS Protocol - Buildathon Challenge</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #00ffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            z-index: -1;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="50" font-size="10" fill="%2300ffff">01010101</text></svg>') repeat;
+            animation: scroll 20s linear infinite;
+        }
+
+        @keyframes scroll {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-100px); }
+        }
+
+        .navbar {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 1rem 2rem;
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid #00ffff;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #00ffff;
+            text-shadow: 0 0 10px #00ffff;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #00ffff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+
+        .nav-links a:hover {
+            border-color: #00ffff;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .unlock-animation {
+            text-align: center;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 15px;
+            border: 3px solid #00ffff;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 20px rgba(0, 255, 255, 0.5); }
+            to { box-shadow: 0 0 40px rgba(0, 255, 255, 0.8); }
+        }
+
+        .unlock-title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #00ff00;
+            text-shadow: 0 0 20px #00ff00;
+            animation: pulse 2s infinite;
+        }
+
+        .unlock-subtitle {
+            font-size: 1.5rem;
+            color: #00ffff;
+            margin-bottom: 2rem;
+        }
+
+        .challenge-header {
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #00ffff;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+
+        .challenge-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            color: #ff6b35;
+            text-shadow: 0 0 15px #ff6b35;
+        }
+
+        .progress-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .progress-bar {
+            width: 300px;
+            height: 10px;
+            background: #333;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ffff, #00ff00);
+            width: 60%;
+            transition: width 0.3s ease;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .challenge-panel {
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #00ffff;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #333;
+        }
+
+        .panel-title {
+            font-size: 1.8rem;
+            color: #00ffff;
+            text-shadow: 0 0 10px #00ffff;
+        }
+
+        .challenge-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            color: white;
+            text-shadow: none;
+            animation: pulse 2s infinite;
+        }
+
+        .challenge-description {
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .challenge-section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border-left: 4px solid #00ffff;
+        }
+
+        .challenge-section h3 {
+            color: #00ffff;
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+
+        .requirements-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .requirements-list li {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #333;
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .requirements-list li:before {
+            content: "⚡";
+            position: absolute;
+            left: 0;
+            color: #00ffff;
+            font-size: 1.2rem;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .tech-tag {
+            background: rgba(0, 255, 255, 0.2);
+            color: #00ffff;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            border: 1px solid #00ffff;
+        }
+
+        .submission-panel {
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #00ffff;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+            height: fit-content;
+        }
+
+        .submission-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            color: #00ffff;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .form-input {
+            padding: 1rem;
+            background: #1a1a2e;
+            color: #00ffff;
+            border: 1px solid #00ffff;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+        }
+
+        .form-input:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #00ffff, #0080ff);
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(45deg, #0080ff, #00ffff);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #00ffff;
+            border: 2px solid #00ffff;
+        }
+
+        .btn-secondary:hover {
+            background: #00ffff;
+            color: #000;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+        }
+
+        .timer {
+            font-size: 1.2rem;
+            color: #ff6b35;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        .submission-status {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .status-success {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+            border: 1px solid #4caf50;
+        }
+
+        .status-error {
+            background: rgba(244, 67, 54, 0.2);
+            color: #f44336;
+            border: 1px solid #f44336;
+        }
+
+        .status-warning {
+            background: rgba(255, 152, 0, 0.2);
+            color: #ff9800;
+            border: 1px solid #ff9800;
+        }
+
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .file-upload input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-upload-label {
+            display: block;
+            padding: 1rem;
+            background: #1a1a2e;
+            color: #00ffff;
+            border: 2px dashed #00ffff;
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .file-upload-label:hover {
+            background: rgba(0, 255, 255, 0.1);
+            border-color: #0080ff;
+        }
+
+        .uploaded-files {
+            margin-top: 1rem;
+        }
+
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            background: rgba(0, 255, 255, 0.1);
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+        }
+
+        .file-item .file-name {
+            color: #00ffff;
+        }
+
+        .file-item .file-size {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .remove-file {
+            background: #f44336;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0.2rem 0.5rem;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .hints-panel {
+            background: rgba(255, 152, 0, 0.1);
+            border: 2px solid #ff9800;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .hints-title {
+            color: #ff9800;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .hint-item {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255, 152, 0, 0.3);
+        }
+
+        .hint-item:last-child {
+            border-bottom: none;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .unlock-title {
+                font-size: 2rem;
+            }
+            
+            .challenge-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="matrix-bg"></div>
+    
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="logo">🚀 OASIS PROTOCOL</div>
+            <div class="nav-links">
+                <a href="#" onclick="showAlgorithmicChallenge()">Algorithm</a>
+                <a href="#" onclick="showTeamProfile()">Profile</a>
+                <a href="#" onclick="showLeaderboard()">Leaderboard</a>
+                <div class="timer" id="timer">02:15:45</div>
+                <a href="#" onclick="logout()">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="unlock-animation">
+            <div class="unlock-title">🔓 UNLOCKED!</div>
+            <div class="unlock-subtitle">Algorithmic Challenge Complete - Buildathon Phase Activated</div>
+            <div style="font-size: 1.2rem; color: #00ff00; margin-top: 1rem;">
+                FLAG: <span style="font-weight: bold;">OASIS{HELLO}</span> ✓
+            </div>
+        </div>
+
+        <div class="challenge-header">
+            <h1 class="challenge-title">🏗️ BUILDATHON CHALLENGE #1</h1>
+            <div class="progress-container">
+                <span>Progress:</span>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <span>60%</span>
+            </div>
+            <p style="text-align: center; margin-top: 1rem;">
+                Team: <span id="teamName" style="color: #00ff00;">NEON_HACKERS</span> | 
+                Challenge 1 of 5 | 
+                Phase: <span style="color: #ff6b35;">BUILDATHON</span>
+            </p>
+        </div>
+
+        <div class="main-content">
+            <div class="challenge-panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">🎯 Mission Brief</h2>
+                    <span class="challenge-badge">BUILDATHON</span>
+                </div>
+                
+                <div class="challenge-description">
+                    <p>Congratulations, hacker! You've successfully cracked the algorithmic challenge. Now comes the real test - building a functional application that will help restore the OASIS infrastructure.</p>
+                    
+                    <p>Your mission is to create a <strong>Virtual Reality Experience Manager</strong> that can handle user sessions, manage virtual environments, and provide real-time communication between users in the OASIS.</p>
+                </div>
+
+                <div class="challenge-section">
+                    <h3>🔧 Technical Requirements</h3>
+                    <ul class="requirements-list">
+                        <li>Build a web-based VR experience manager with user authentication</li>
+                        <li>Implement real-time chat/communication system using WebSockets</li>
+                        <li>Create a virtual environment selector with at least 3 different themes</li>
+                        <li>Add user avatar customization with persistent storage</li>
+                        <li>Implement session management and user presence indicators</li>
+                        <li>Create a responsive UI that works on both desktop and mobile</li>
+                        <li>Add sound effects and background music for immersion</li>
+                    </ul>
+                </div>
+
+                <div class="challenge-section">
+                    <h3>💡 Functional Features</h3>
+                    <ul class="requirements-list">
+                        <li>User registration and login system</li>
+                        <li>Virtual world selection (e.g., Cyberpunk City, Space Station, Fantasy Realm)</li>
+                        <li>Real-time user chat with emoji support</li>
+                        <li>Avatar creation and customization</li>
+                        <li>Friend system with online/offline status</li>
+                        <li>Leaderboard or achievement system</li>
+                        <li>Settings panel for audio, graphics, and preferences</li>
+                    </ul>
+                </div>
+
+                <div class="challenge-section">
+                    <h3>🛠️ Recommended Tech Stack</h3>
+                    <div class="tech-stack">
+                        <span class="tech-tag">React.js / Vue.js</span>
+                        <span class="tech-tag">Node.js / Express</span>
+                        <span class="tech-tag">Socket.io</span>
+                        <span class="tech-tag">MongoDB / PostgreSQL</span>
+                        <span class="tech-tag">Three.js / A-Frame</span>
+                        <span class="tech-tag">CSS3 / Tailwind</span>
+                        <span class="tech-tag">WebRTC (Optional)</span>
+                    </div>
+                </div>
+
+                <div class="challenge-section">
+                    <h3>🎯 Evaluation Criteria</h3>
+                    <ul class="requirements-list">
+                        <li><strong>Functionality (40%):</strong> All core features work as expected</li>
+                        <li><strong>User Experience (25%):</strong> Intuitive design and smooth interactions</li>
+                        <li><strong>Code Quality (20%):</strong> Clean, well-structured, and documented code</li>
+                        <li><strong>Innovation (15%):</strong> Creative features and unique implementations</li>
+                    </ul>
+                </div>
+
+                <div class="hints-panel">
+                    <div class="hints-title">💡 Pro Tips</div>
+                    <div class="hint-item">
+                        <strong>Start Simple:</strong> Begin with basic authentication and chat, then add VR elements
+                    </div>
+                    <div class="hint-item">
+                        <strong>Mobile First:</strong> Ensure your app works well on mobile devices
+                    </div>
+                    <div class="hint-item">
+                        <strong>Real-time Updates:</strong> Use WebSockets for instant communication and presence
+                    </div>
+                    <div class="hint-item">
+                        <strong>Data Persistence:</strong> Store user preferences and avatar data locally or in database
+                    </div>
+                </div>
+            </div>
+
+            <div class="submission-panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">📤 Submit Solution</h2>
+                </div>
+                
+                <form class="submission-form" onsubmit="submitSolution(event)">
+                    <div class="form-group">
+                        <label class="form-label">GitHub Repository URL *</label>
+                        <input type="url" class="form-input" id="githubUrl" 
+                               placeholder="https://github.com/username/repository" required>
+                        <small style="color: #888; margin-top: 0.5rem;">
+                            Make sure your repository is public and contains a README.md
+                        </small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Live Demo URL (Optional)</label>
+                        <input type="url" class="form-input" id="demoUrl" 
+                               placeholder="https://yourapp.netlify.app">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Team Members</label>
+                        <input type="text" class="form-input" id="teamMembers" 
+                               placeholder="John Doe, Jane Smith, Alex Johnson" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Solution Description</label>
+                        <textarea class="form-input form-textarea" id="description" 
+                                  placeholder="Briefly describe your solution, key features, and any special implementations..." required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Technologies Used</label>
+                        <input type="text" class="form-input" id="technologies" 
+                               placeholder="React, Node.js, Socket.io, MongoDB, Three.js" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Setup Instructions</label>
+                        <textarea class="form-input form-textarea" id="setupInstructions" 
+                                  placeholder="Provide clear instructions on how to run your application locally..." required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Additional Files (Optional)</label>
+                        <div class="file-upload">
+                            <input type="file" id="fileUpload" multiple accept=".zip,.pdf,.txt,.md">
+                            <label for="fileUpload" class="file-upload-label">
+                                📁 Click to upload files (Screenshots, Documentation, etc.)
+                            </label>
+                        </div>
+                        <div class="uploaded-files" id="uploadedFiles"></div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        🚀 Submit Buildathon Solution
+                    </button>
+                    
+                    <button type="button" class="btn btn-secondary" onclick="saveDraft()">
+                        💾 Save as Draft
+                    </button>
+                </form>
+                
+                <div class="submission-status" id="submissionStatus" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let timeLeft = 2 * 60 * 60 + 15 * 60 + 45; // 2h 15m 45s
+        let uploadedFiles = [];
+        
+        function updateTimer() {
+            const hours = Math.floor(timeLeft / 3600);
+            const minutes = Math.floor((timeLeft % 3600) / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer').textContent = 
+                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timeLeft > 0) {
+                timeLeft--;
+                setTimeout(updateTimer, 1000);
+            } else {
+                alert('⏰ Time is up! Please submit your solution immediately.');
+            }
+        }
+        updateTimer();
+
+        function submitSolution(event) {
+            event.preventDefault();
+            
+            const githubUrl = document.getElementById('githubUrl').value;
+            const demoUrl = document.getElementById('demoUrl').value;
+            const teamMembers = document.getElementById('teamMembers').value;
+            const description = document.getElementById('description').value;
+            const technologies = document.getElementById('technologies').value;
+            const setupInstructions = document.getElementById('setupInstructions').value;
+            
+            // Basic validation
+            if (!githubUrl || !teamMembers || !description || !technologies || !setupInstructions) {
+                showStatus('Please fill in all required fields.', 'error');
+                return;
+            }
+            
+            // Validate GitHub URL
+            if (!githubUrl.includes('github.com')) {
+                showStatus('Please provide a valid GitHub repository URL.', 'error');
+                return;
+            }
+            
+            showStatus('Submitting solution...', 'warning');
+            
+            // Simulate submission
+            setTimeout(() => {
+                showStatus('🎉 Solution submitted successfully! Moving to next challenge...', 'success');
+                
+                // Auto-redirect after 3 seconds
+                setTimeout(() => {
+                    window.location.href = 'leaderboard.html';
+                }, 3000);
+            }, 2000);
+        }
+
+        function saveDraft() {
+            const formData = {
+                githubUrl: document.getElementById('githubUrl').value,
+                demoUrl: document.getElementById('demoUrl').value,
+                teamMembers: document.getElementById('teamMembers').value,
+                description: document.getElementById('description').value,
+                technologies: document.getElementById('technologies').value,
+                setupInstructions: document.getElementById('setupInstructions').value
+            };
+            
+            sessionStorage.setItem('buildathonDraft', JSON.stringify(formData));
+            showStatus('Draft saved successfully!', 'success');
+        }
+
+        function loadDraft() {
+            const draft = sessionStorage.getItem('buildathonDraft');
+            if (draft) {
+                const formData = JSON.parse(draft);
+                document.getElementById('githubUrl').value = formData.githubUrl || '';
+                document.getElementById('demoUrl').value = formData.demoUrl || '';
+                document.getElementById('teamMembers').value = formData.teamMembers || '';
+                document.getElementById('description').value = formData.description || '';
+                document.getElementById('technologies').value = formData.technologies || '';
+                document.getElementById('setupInstructions').value = formData.setupInstructions || '';
+            }
+        }
+
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('submissionStatus');
+            statusDiv.textContent = message;
+            statusDiv.className = `submission-status status-${type}`;
+            statusDiv.style.display = 'block';
+            
+            if (type === 'success' || type === 'error') {
+                setTimeout(() => {
+                    statusDiv.style.display = 'none';
+                }, 5000);
+            }
+        }
+
+        // File upload handling
+        document.getElementById('fileUpload').addEventListener('change', function(event) {
+            const files = event.target.files;
+            const uploadedFilesDiv = document.getElementById('uploadedFiles');
+            
+            for (let file of files) {
+                if (file.size > 10 * 1024 * 1024) { // 10MB limit
+                    alert(`File ${file.name} is too large. Maximum size is 10MB.`);
+                    continue;
+                }
+                
+                uploadedFiles.push(file);
+                
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                fileItem.innerHTML = `
+                    <div>
+                        <div class="file-name">${file.name}</div>
+                        <div class="file-size">${(file.size / 1024 / 1024).toFixed(2)} MB</div>
+                    </div>
+                    <button class="remove-file" onclick="removeFile('${file.name}')">Remove</button>
+                `;
+                uploadedFilesDiv.appendChild(fileItem);
+            }
+        });
+
+        function removeFile(fileName) {
+            uploadedFiles = uploadedFiles.filter(file => file.name !== fileName);
+            const fileItems = document.querySelectorAll('.file-item');
+            fileItems.forEach(item => {
+                if (item.querySelector('.file-name').textContent === fileName) {
+                    item.remove();
+                }
+            });
+        }
+
+        function showAlgorithmicChallenge() {
+            window.location.href = 'algorithmic-challenge.html';
+        }
+
+        function showTeamProfile() {
+            window.location.href = 'team-profile.html';
+        }
+
+        function showLeaderboard() {
+            window.location.href = 'leaderboard.html';
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout? Any unsaved progress will be lost.')) {
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Load draft on page load
+        window.onload = function() {
+            loadDraft();
+        };
+
+        // Auto-save draft every 30 seconds
+        setInterval(saveDraft, 30000);
+    </script>
+</body>
+</html>

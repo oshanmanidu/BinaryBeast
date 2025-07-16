@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OASIS Protocol - Challenge Form</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            background: linear-gradient(45deg, #00f5ff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #b0b0b0;
+            font-size: 1.1em;
+        }
+
+        .form-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.5em;
+            color: #00f5ff;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(0, 245, 255, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .required {
+            color: #ff4757;
+        }
+
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: #00f5ff;
+        }
+
+        .form-input::placeholder, .form-textarea::placeholder {
+            color: #b0b0b0;
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group-inline {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checkbox {
+            width: 18px;
+            height: 18px;
+            accent-color: #00f5ff;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #00f5ff, #0080ff);
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 245, 255, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-success {
+            background: linear-gradient(45deg, #00ff7f, #00cc64);
+            color: #ffffff;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 127, 0.4);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .help-text {
+            font-size: 12px;
+            color: #b0b0b0;
+            margin-top: 5px;
+        }
+
+        .code-editor {
+            position: relative;
+            background: #1a1a1a;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .code-editor-header {
+            background: #2d2d2d;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid #404040;
+        }
+
+        .code-editor-title {
+            font-size: 12px;
+            color: #b0b0b0;
+        }
+
+        .language-selector {
+            background: #404040;
+            color: #ffffff;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .code-textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 15px;
+            border: none;
+            background: #1a1a1a;
+            color: #ffffff;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            resize: vertical;
+        }
+
+        .error-message {
+            color: #ff4757;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .success-message {
+            color: #00ff7f;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: #ffffff;
+            font-weight: 600;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s ease;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .toast-success {
+            background: linear-gradient(45deg, #00ff7f, #00cc64);
+        }
+
+        .toast-error {
+            background: linear-gradient(45deg, #ff4757, #ff3742);
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 OASIS Protocol</h1>
+            <p id="headerSubtitle">Create New Challenge</p>
+        </div>
+
+        <div class="form-container">
+            <form id="challengeForm">
+                <!-- Basic Challenge Information -->
+                <div class="form-section">
+                    <h2 class="section-title">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                        Challenge Information
+                    </h2>
+
+                    <div class="form-group">
+                        <label class="form-label" for="challengeTitle">Challenge Title <span class="required">*</span></label>
+                        <input type="text" id="challengeTitle" class="form-input" placeholder="Enter challenge title" required>
+                        <div class="help-text">A clear, descriptive title for your challenge</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="challengeDescription">Description <span class="required">*</span></label>
+                        <textarea id="challengeDescription" class="form-textarea" placeholder="Describe the challenge objective and context" required></textarea>
+                        <div class="help-text">Provide context and objectives for participants</div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="challengeStatus">Status</label>
+                            <select id="challengeStatus" class="form-select">
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="challengeFlag">Challenge Flag <span class="required">*</span></label>
+                            <input type="text" id="challengeFlag" class="form-input" placeholder="OASIS{your_flag_here}" required>
+                            <div class="help-text">The flag that participants must discover</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Algorithmic Problem Section -->
+                <div class="form-section">
+                    <h2 class="section-title">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0L19.2 12l-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/>
+                        </svg>
+                        Algorithmic Problem
+                    </h2>
+
+                    <div class="form-group">
+                        <label class="form-label" for="algoTitle">Problem Title <span class="required">*</span></label>
+                        <input type="text" id="algoTitle" class="form-input" placeholder="Enter algorithmic problem title" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="algoDescription">Problem Statement <span class="required">*</span></label>
+                        <textarea id="algoDescription" class="form-textarea" placeholder="Detailed problem description with examples" required></textarea>
+                        <div class="help-text">Include problem statement, input/output format, and examples</div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="algoDifficulty">Difficulty Level</label>
+                            <select id="algoDifficulty" class="form-select">
+                                <option value="Easy">Easy</option>
+                                <option value="Medium">Medium</option>
+                                <option value="Hard">Hard</option>
+                                <option value="Expert">Expert</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="algoTimeLimit">Time Limit (seconds)</label>
+                            <input type="number" id="algoTimeLimit" class="form-input" value="2" min="1" max="30">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="algoMemoryLimit">Memory Limit (MB)</label>
+                            <input type="number" id="algoMemoryLimit" class="form-input" value="256" min="64" max="1024">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="algoLanguages">Allowed Languages</label>
+                            <select id="algoLanguages" class="form-select" multiple>
+                                <option value="python3">Python 3</option>
+                                <option value="java">Java</option>
+                                <option value="cpp">C++</option>
+                                <option value="javascript">JavaScript</option>
+                                <option value="go">Go</option>
+                            </select>
+                            <div class="help-text">Hold Ctrl/Cmd to select multiple languages</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="algoConstraints">Constraints</label>
+                        <textarea id="algoConstraints" class="form-textarea" placeholder="Input constraints and limitations"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Test Cases</label>
+                        <div class="code-editor">
+                            <div class="code-editor-header">
+                                <span class="code-editor-title">Input/Output Test Cases</span>
+                            </div>
+                            <textarea id="algoTestCases" class="code-textarea" placeholder="Input:&#10;3&#10;1 2 3&#10;&#10;Expected Output:&#10;6&#10;&#10;Input:&#10;4&#10;1 2 3 4&#10;&#10;Expected Output:&#10;10"></textarea>
+                        </div>
+                        <div class="help-text">Format: Input: [input] Expected Output: [output] (separate multiple test cases with blank lines)</div>
+                    </div>
+                </div>
+
+                <!-- Buildathon Problem Section -->
+                <div class="form-section">
+                    <h2 class="section-title">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                        Buildathon Problem
+                    </h2>
+
+                    <div class="form-group">
+                        <label class="form-label" for="buildTitle">Project Title <span class="required">*</span></label>
+                        <input type="text" id="buildTitle" class="form-input" placeholder="Enter buildathon project title" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="buildDescription">Project Description <span class="required">*</span></label>
+                        <textarea id="buildDescription" class="form-textarea" placeholder="Detailed project requirements and specifications" required></textarea>
+                        <div class="help-text">Include project goals, requirements, and expected deliverables</div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="buildCategory">Category</label>
+                            <select id="buildCategory" class="form-select">
+                                <option value="web">Web Application</option>
+                                <option value="mobile">Mobile App</option>
+                                <option value="desktop">Desktop Application</option>
+                                <option value="api">API/Backend</option>
+                                <option value="game">Game Development</option>
+                                <option value="ml">Machine Learning</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="buildDuration">Expected Duration (hours)</label>
+                            <input type="number" id="buildDuration" class="form-input" value="4" min="1" max="24">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="buildTechnologies">Suggested Technologies</label>
+                        <input type="text" id="buildTechnologies" class="form-input" placeholder="React, Node.js, Python, etc. (comma-separated)">
+                        <div class="help-text">Recommended technologies for the project</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="buildRequirements">Technical Requirements</label>
+                        <textarea id="buildRequirements" class="form-textarea" placeholder="Specific technical requirements and constraints"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="buildEvaluation">Evaluation Criteria</label>
+                        <textarea id="buildEvaluation" class="form-textarea" placeholder="How will submissions be evaluated?"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="requiresDemo" class="checkbox">
+                            <label for="requiresDemo">Requires Live Demo</label>
+                        </div>
+                        <div class="help-text">Check if teams need to provide a working demonstration</div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <a href="admin-challenges-list.html" class="btn btn-secondary">Cancel</a>
+                    <button type="button" class="btn btn-primary" onclick="previewChallenge()">Preview</button>
+                    <button type="submit" class="btn btn-success">Save Challenge</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        let isEditMode = false;
+        let currentChallengeId = null;
+
+        // Sample data for editing
+        const sampleChallenges = {
+            1: {
+                title: "Binary Search Master",
+                description: "Implement efficient binary search algorithms and solve related problems. Test your understanding of divide and conquer.",
+                status: "active",
+                flag: "OASIS{b1n4ry_s34rch_m4st3r}",
+                algorithmic: {
+                    title: "Binary Search Implementation",
+                    description: "Given a sorted array of integers, implement binary search to find a target value.",
+                    difficulty: "Medium",
+                    timeLimit: 2,
+                    memoryLimit: 256,
+                    languages: ["python3", "java", "cpp"],
+                    constraints: "1 ≤ n ≤ 10^5\n-10^9 ≤ arr[i] ≤ 10^9\n-10^9 ≤ target ≤ 10^9",
+                    testCases: "Input:\n5\n1 2 3 4 5\n3\n\nExpected Output:\n2\n\nInput:\n4\n1 3 5 7\n6\n\nExpected Output:\n-1"
+                },
+                buildathon: {
+                    title: "Search Engine Interface",
+                    description: "Build a web-based search interface that implements binary search for efficient data retrieval.",
+                    category: "web",
+                    duration: 4,
+                    technologies: "React, Node.js, Express",
+                    requirements: "Must implement binary search algorithm\nResponsive design\nSearch suggestions",
+                    evaluation: "Algorithm correctness (40%)\nUI/UX design (30%)\nPerformance (30%)",
+                    requiresDemo: true
+                }
+            }
+        };
+
+        function initializePage() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const challengeId = urlParams.get('id');
+            
+            if (challengeId) {
+                isEditMode = true;
+                currentChallengeId = parseInt(challengeId);
+                document.getElementById('headerSubtitle').textContent = 'Edit Challenge';
+                loadChallengeData(currentChallengeId);
+            }
+
+            setupEventListeners();
+        }
+
+        function loadChallengeData(challengeId) {
+            const challenge = sampleChallenges[challengeId];
+            if (!challenge) return;
+
+            // Basic information
+            document.getElementById('challengeTitle').value = challenge.title;
+            document.getElementById('challengeDescription').value = challenge.description;
+            document.getElementById('challengeStatus').value = challenge.status;
+            document.getElementById('challengeFlag').value = challenge.flag;
+
+            // Algorithmic problem
+            document.getElementById('algoTitle').value = challenge.algorithmic.title;
+            document.getElementById('algoDescription').value = challenge.algorithmic.description;
+            document.getElementById('algoDifficulty').value = challenge.algorithmic.difficulty;
+            document.getElementById('algoTimeLimit').value = challenge.algorithmic.timeLimit;
+            document.getElementById('algoMemoryLimit').value = challenge.algorithmic.memoryLimit;
+            document.getElementById('algoConstraints').value = challenge.algorithmic.constraints;
+            document.getElementById('algoTestCases').value = challenge.algorithmic.testCases;
+
+            // Set selected languages
+            const languageSelect = document.getElementById('algoLanguages');
+            for (let option of languageSelect.options) {
+                option.selected = challenge.algorithmic.languages.includes(option.value);
+            }
+
+            // Buildathon problem
+            document.getElementById('buildTitle').value = challenge.buildathon.title;
+            document.getElementById('buildDescription').value = challenge.buildathon.description;
+            document.getElementById('buildCategory').value = challenge.buildathon.category;
+            document.getElementById('buildDuration').value = challenge.buildathon.duration;
+            document.getElementById('buildTechnologies').value = challenge.buildathon.technologies;
+            document.getElementById('buildRequirements').value = challenge.buildathon.requirements;
+            document.getElementById('buildEvaluation').value = challenge.buildathon.evaluation;
+            document.getElementById('requiresDemo').checked = challenge.buildathon.requiresDemo;
+        }
+
+        function setupEventListeners() {
+            document.getElementById('challengeForm').addEventListener('submit', handleSubmit);
+        }
+
+        function handleSubmit(e) {
+            e.preventDefault();
+            
+            if (validateForm()) {
+                const formData = collectFormData();
+                
+                if (isEditMode) {
+                    updateChallenge(formData);
+                } else {
+                    createChallenge(formData);
+                }
+            }
+        }
+
+        function validateForm() {
+            const requiredFields = [
+                'challengeTitle',
+                'challengeDescription',
+                'challengeFlag',
+                'algoTitle',
+                'algoDescription',
+                'buildTitle',
+                'buildDescription'
+            ];
+
+            let isValid = true;
+            
+            requiredFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                const value = field.value.trim();
+                
+                if (!value) {
+                    showFieldError(field, 'This field is required');
+                    isValid = false;
+                } else {
+                    clearFieldError(field);
+                }
+            });
+
+            // Validate flag format
+            const flag = document.getElementById('challengeFlag').value.trim();
+            if (flag && !flag.match(/^OASIS\{.*\}$/)) {
+                showFieldError(document.getElementById('challengeFlag'), 'Flag must be in format OASIS{...}');
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        function showFieldError(field, message) {
+            clearFieldError(field);
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.textContent = message;
+            field.parentNode.appendChild(errorDiv);
+            field.style.borderColor = '#ff4757';
+        }
+
+        function clearFieldError(field) {
+            const errorDiv = field.parentNode.querySelector('.error-message');
+            if (errorDiv) {
+                errorDiv.remove();
+            }
+            field.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+        }
+
+        function collectFormData() {
+            const selectedLanguages = Array.from(document.getElementById('algoLanguages').selectedOptions)
+                .map(option => option.value);
+
+            return {
+                id: currentChallengeId || Date.now(),
+                title: document.getElementById('challengeTitle').value.trim(),
+                description: document.getElementById('challengeDescription').value.trim(),
+                status: document.getElementById('challengeStatus').value,
+                flag: document.getElementById('challengeFlag').value.trim(),
+                algorithmic: {
+                    title: document.getElementById('algoTitle').value.trim(),
+                    description: document.getElementById('algoDescription').value.trim(),
+                    difficulty: document.getElementById('algoDifficulty').value,
+                    timeLimit: parseInt(document.getElementById('algoTimeLimit').value),
+                    memoryLimit: parseInt(document.getElementById('algoMemoryLimit').value),
+                    languages: selectedLanguages,
+                    constraints: document.getElementById('algoConstraints').value.trim(),
+                    testCases: document.getElementById('algoTestCases').value.trim()
+                },
+                buildathon: {
+                    title: document.getElementById('buildTitle').value.trim(),
+                    description: document.getElementById('buildDescription').value.trim(),
+                    category: document.getElementById('buildCategory').value,
+                    duration: parseInt(document.getElementById('buildDuration').value),
+                    technologies: document.getElementById('buildTechnologies').value.trim(),
+                    requirements: document.getElementById('buildRequirements').value.trim(),
+                    evaluation: document.getElementById('buildEvaluation').value.trim(),
+                    requiresDemo: document.getElementById('requiresDemo').checked
+                },
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            };
+        }
+
+        function createChallenge(formData) {
+            // Simulate API call
+            setTimeout(() => {
+                showToast('Challenge created successfully!', 'success');
+                setTimeout(() => {
+                    window.location.href = 'admin-challenges-list.html';
+                }, 2000);
+            }, 1000);
+        }
+
+        function updateChallenge(formData) {
+            // Simulate API call
+            setTimeout(() => {
+                showToast('Challenge updated successfully!', 'success');
+                setTimeout(() => {
+                    window.location.href = 'admin-challenges-list.html';
+                }, 2000);
+            }, 1000);
+        }
+
+        function previewChallenge() {
+            if (validateForm()) {
+                const formData = collectFormData();
+                // Open preview in new tab/window
+                const previewWindow = window.open('', '_blank');
+                previewWindow.document.write(generatePreviewHTML(formData));
+                previewWindow.document.close();
+            }
+        }
+
+        function generatePreviewHTML(data) {
+            return `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Challenge Preview</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+                        .preview-container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; }
+                        .section { margin-bottom: 30px; }
+                        .section h2 { color: #333; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+                        .meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+                        .meta-item { background: #f8f9fa; padding: 10px; border-radius: 4px; }
+                        .meta-label { font-weight: bold; color: #666; }
+                        .code-block { background: #f8f9fa; padding: 15px; border-radius: 4px; font-family: monospace; }
+                    </style>
+                </head>
+                <body>
+                    <div class="preview-container">
+                        <h1>${data.title}</h1>
+                        <p>${data.description}</p>
+                        
+                        <div class="meta">
+                            <div class="meta-item">
+                                <div class="meta-label">Status</div>
+                                <div>${data.status}</div>
+                            </div>
+                            <div class="meta-item">
+                                <div class="meta-label">Flag</div>
+                                <div>${data.flag}</div>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <h2>🔢 Algorithmic Problem</h2>
+                            <h3>${data.algorithmic.title}</h3>
+                            <p>${data.algorithmic.description}</p>
+                            <div class="meta">
+                                <div class="meta-item">
+                                    <div class="meta-label">Difficulty</div>
+                                    <div>${data.algorithmic.difficulty}</div>
+                                </div>
+                                <div class="meta-item">
+                                    <div class="meta-label">Time Limit</div>
+                                    <div>${data.algorithmic.timeLimit}s</div>
+                                </div>
+                                <div class="meta-item">
+                                    <div class="meta-label">Memory Limit</div>
+                                    <div>${data.algorithmic.memoryLimit}MB</div>
+                                </div>
+                            </div>
+                            ${data.algorithmic.constraints ? `<h4>Constraints:</h4><div class="code-block">${data.algorithmic.constraints}</div>` : ''}
+                            ${data.algorithmic.testCases ? `<h4>Test Cases:</h4><div class="code-block">${data.algorithmic.testCases}</div>` : ''}
+                        </div>
+
+                        <div class="section">
+                            <h2>🏗️ Buildathon Problem</h2>
+                            <h3>${data.buildathon.title}</h3>
+                            <p>${data.buildathon.description}</p>
+                            <div class="meta">
+                                <div class="meta-item">
+                                    <div class="meta-label">Category</div>
+                                    <div>${data.buildathon.category}</div>
+                                </div>
+                                <div class="meta-item">
+                                    <div class="meta-label">Duration</div>
+                                    <div>${data.buildathon.duration} hours</div>
+                                </div>
+                                <div class="meta-item">
+                                    <div class="meta-label">Demo Required</div>
+                                    <div>${data.buildathon.requiresDemo ? 'Yes' : 'No'}</div>
+                                </div>
+                            </div>
+                            ${data.buildathon.technologies ? `<h4>Technologies:</h4><p>${data.buildathon.technologies}</p>` : ''}
+                            ${data.buildathon.requirements ? `<h4>Requirements:</h4><div class="code-block">${data.buildathon.requirements}</div>` : ''}
+                            ${data.buildathon.evaluation ? `<h4>Evaluation:</h4><div class="code-block">${data.buildathon.evaluation}</div>` : ''}
+                        </div>
+                    </div>
+                </body>
+                </html>
+            `;
+        }
+
+        function showToast(message, type) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast toast-${type} show`;
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Initialize page
+        initializePage();
+    </script>
+</body>
+</html>

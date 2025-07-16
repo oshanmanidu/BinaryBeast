@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OASIS Protocol - Algorithmic Challenge</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #00ffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            z-index: -1;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="50" font-size="10" fill="%2300ffff">01010101</text></svg>') repeat;
+            animation: scroll 20s linear infinite;
+        }
+
+        @keyframes scroll {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-100px); }
+        }
+
+        .navbar {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 1rem 2rem;
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid #00ffff;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #00ffff;
+            text-shadow: 0 0 10px #00ffff;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #00ffff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+
+        .nav-links a:hover {
+            border-color: #00ffff;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .challenge-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            border: 2px solid #00ffff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+
+        .challenge-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 20px #00ffff;
+        }
+
+        .challenge-subtitle {
+            font-size: 1.2rem;
+            color: #888;
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #333;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ffff, #0080ff);
+            width: 30%;
+            transition: width 0.3s ease;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .problem-panel {
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #00ffff;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #333;
+        }
+
+        .panel-title {
+            font-size: 1.5rem;
+            color: #00ffff;
+        }
+
+        .difficulty-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            background: #ff6b35;
+            color: white;
+        }
+
+        .difficulty-easy { background: #4caf50; }
+        .difficulty-medium { background: #ff9800; }
+        .difficulty-hard { background: #f44336; }
+
+        .problem-description {
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-section h3 {
+            color: #00ffff;
+            margin-bottom: 0.5rem;
+        }
+
+        .constraints {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+        }
+
+        .code-panel {
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #00ffff;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+        }
+
+        .code-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            align-items: center;
+        }
+
+        .language-select {
+            background: #1a1a2e;
+            color: #00ffff;
+            border: 1px solid #00ffff;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .code-editor {
+            width: 100%;
+            height: 400px;
+            background: #0a0a0a;
+            color: #00ffff;
+            border: 1px solid #333;
+            border-radius: 5px;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            resize: vertical;
+            margin-bottom: 1rem;
+        }
+
+        .code-editor:focus {
+            outline: none;
+            border-color: #00ffff;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .btn-primary {
+            background: #00ffff;
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            background: #0080ff;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #00ffff;
+            border: 2px solid #00ffff;
+        }
+
+        .btn-secondary:hover {
+            background: #00ffff;
+            color: #000;
+        }
+
+        .output-panel {
+            background: #0a0a0a;
+            border: 1px solid #333;
+            border-radius: 5px;
+            padding: 1rem;
+            min-height: 150px;
+            font-family: 'Courier New', monospace;
+            margin-bottom: 1rem;
+        }
+
+        .output-success {
+            color: #4caf50;
+        }
+
+        .output-error {
+            color: #f44336;
+        }
+
+        .flag-submission {
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #00ffff;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+            margin-top: 2rem;
+        }
+
+        .flag-input {
+            width: 100%;
+            padding: 1rem;
+            background: #1a1a2e;
+            color: #00ffff;
+            border: 1px solid #00ffff;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .flag-input:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+
+        .status-idle { background: #888; }
+        .status-running { background: #ff9800; animation: pulse 1s infinite; }
+        .status-success { background: #4caf50; }
+        .status-error { background: #f44336; }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .timer {
+            font-size: 1.2rem;
+            color: #ff6b35;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="matrix-bg"></div>
+    
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="logo">🚀 OASIS PROTOCOL</div>
+            <div class="nav-links">
+                <a href="#" onclick="showTeamProfile()">Profile</a>
+                <a href="#" onclick="showLeaderboard()">Leaderboard</a>
+                <div class="timer" id="timer">02:45:30</div>
+                <a href="#" onclick="logout()">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="challenge-header">
+            <h1 class="challenge-title">ALGORITHMIC CHALLENGE #1</h1>
+            <p class="challenge-subtitle">Crack the code to unlock the next phase</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <p>Challenge 1 of 5 - Team: <span id="teamName">NEON_HACKERS</span></p>
+        </div>
+
+        <div class="main-content">
+            <div class="problem-panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">Problem Statement</h2>
+                    <span class="difficulty-badge difficulty-medium">Medium</span>
+                </div>
+                
+                <div class="problem-description">
+                    <div class="problem-section">
+                        <h3>Description</h3>
+                        <p>In the depths of the OASIS, you've discovered an encrypted message that holds the key to the next level. The message is encoded using a Caesar cipher with a twist - each character is shifted by a different amount based on its position.</p>
+                        
+                        <p>Given an encrypted string and a key pattern, decode the message to reveal the flag.</p>
+                    </div>
+                    
+                    <div class="problem-section">
+                        <h3>Input Format</h3>
+                        <p>First line: Encrypted string (contains only uppercase letters A-Z)<br>
+                        Second line: Key pattern (array of integers representing shift amounts)</p>
+                    </div>
+                    
+                    <div class="problem-section">
+                        <h3>Output Format</h3>
+                        <p>Decoded string</p>
+                    </div>
+                    
+                    <div class="constraints">
+                        <h3>Constraints</h3>
+                        <ul>
+                            <li>1 ≤ Length of string ≤ 1000</li>
+                            <li>1 ≤ Key pattern length ≤ 10</li>
+                            <li>-25 ≤ Shift amount ≤ 25</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="problem-section">
+                        <h3>Example</h3>
+                        <p><strong>Input:</strong><br>
+                        KHOOR<br>
+                        [3, 1, 2]</p>
+                        
+                        <p><strong>Output:</strong><br>
+                        HELLO</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">Code Editor</h2>
+                    <div class="code-controls">
+                        <select class="language-select" id="languageSelect">
+                            <option value="python">Python</option>
+                            <option value="java">Java</option>
+                            <option value="cpp">C++</option>
+                            <option value="javascript">JavaScript</option>
+                            <option value="c">C</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <textarea class="code-editor" id="codeEditor" placeholder="# Write your solution here...
+def decode_message(encrypted, key_pattern):
+    # Your code here
+    pass
+
+# Read input
+encrypted = input().strip()
+key_pattern = list(map(int, input().split()))
+
+# Solve and print result
+result = decode_message(encrypted, key_pattern)
+print(result)"></textarea>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="runCode()">
+                        <span class="status-indicator status-idle" id="runStatus"></span>
+                        Run Code
+                    </button>
+                    <button class="btn btn-secondary" onclick="submitCode()">Submit Solution</button>
+                </div>
+                
+                <div class="output-panel" id="outputPanel">
+                    <div style="color: #888;">Output will appear here...</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flag-submission">
+            <div class="panel-header">
+                <h2 class="panel-title">Flag Submission</h2>
+            </div>
+            <p style="margin-bottom: 1rem;">Once you've solved the algorithmic challenge, submit the flag to unlock the buildathon phase:</p>
+            <input type="text" class="flag-input" id="flagInput" placeholder="Enter the flag (e.g., OASIS{your_solution_here})">
+            <button class="btn btn-primary" onclick="submitFlag()">Submit Flag</button>
+        </div>
+    </div>
+
+    <script>
+        let currentStatus = 'idle';
+        let teamData = {
+            name: 'NEON_HACKERS',
+            progress: 30,
+            currentChallenge: 1,
+            totalChallenges: 5
+        };
+
+        // Timer functionality
+        let timeLeft = 2 * 60 * 60 + 45 * 60 + 30; // 2h 45m 30s
+        function updateTimer() {
+            const hours = Math.floor(timeLeft / 3600);
+            const minutes = Math.floor((timeLeft % 3600) / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer').textContent = 
+                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timeLeft > 0) {
+                timeLeft--;
+                setTimeout(updateTimer, 1000);
+            }
+        }
+        updateTimer();
+
+        // Code execution
+        async function runCode() {
+            const code = document.getElementById('codeEditor').value;
+            const language = document.getElementById('languageSelect').value;
+            const statusIndicator = document.getElementById('runStatus');
+            const outputPanel = document.getElementById('outputPanel');
+            
+            statusIndicator.className = 'status-indicator status-running';
+            currentStatus = 'running';
+            
+            outputPanel.innerHTML = '<div style="color: #ff9800;">Running code...</div>';
+            
+            try {
+                // Simulate API call to Judge0
+                const response = await fetch('http://10.3.5.139:2358/submissions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-RapidAPI-Key': 'ZHVvdGhhbjUuMA=='
+                    },
+                    body: JSON.stringify({
+                        source_code: code,
+                        language_id: getLanguageId(language),
+                        stdin: "KHOOR\n3 1 2"
+                    })
+                });
+                
+                // Simulate response
+                setTimeout(() => {
+                    const mockOutput = 'HELLO';
+                    statusIndicator.className = 'status-indicator status-success';
+                    outputPanel.innerHTML = `<div class="output-success">✓ Execution successful</div><div>Output: ${mockOutput}</div><div style="color: #888; font-size: 0.9rem;">Execution time: 0.1s | Memory: 5.2MB</div>`;
+                }, 2000);
+                
+            } catch (error) {
+                statusIndicator.className = 'status-indicator status-error';
+                outputPanel.innerHTML = `<div class="output-error">✗ Execution failed</div><div>${error.message}</div>`;
+            }
+        }
+
+        function getLanguageId(language) {
+            const map = {
+                'python': 71,
+                'java': 62,
+                'cpp': 54,
+                'javascript': 63,
+                'c': 50
+            };
+            return map[language] || 71;
+        }
+
+        function submitCode() {
+            alert('Code submitted for evaluation!');
+        }
+
+        function submitFlag() {
+            const flag = document.getElementById('flagInput').value;
+            if (flag.toLowerCase() === 'oasis{hello}' || flag.toLowerCase() === 'hello') {
+                alert('🎉 Correct flag! Unlocking buildathon challenge...');
+                // Redirect to buildathon challenge
+                window.location.href = 'buildathon-challenge.html';
+            } else {
+                alert('❌ Incorrect flag. Try again!');
+            }
+        }
+
+        function showTeamProfile() {
+            window.location.href = 'team-profile.html';
+        }
+
+        function showLeaderboard() {
+            window.location.href = 'leaderboard.html';
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Auto-save code
+        setInterval(() => {
+            const code = document.getElementById('codeEditor').value;
+            if (code) {
+                localStorage.setItem('savedCode', code);
+            }
+        }, 5000);
+
+        // Load saved code
+        window.onload = function() {
+            const savedCode = localStorage.getItem('savedCode');
+            if (savedCode) {
+                document.getElementById('codeEditor').value = savedCode;
+            }
+        };
+    </script>
+</body>
+</html>

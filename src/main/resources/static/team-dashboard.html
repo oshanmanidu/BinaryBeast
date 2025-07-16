@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Dashboard - The Oasis Protocol</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            color: #00ffff;
+        }
+
+        .navbar {
+            background: rgba(0, 255, 255, 0.1);
+            padding: 15px 0;
+            border-bottom: 1px solid #00ffff;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #00ffff;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #00ffff;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logout-btn {
+            background: #ff4444;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #ff6666;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #00ffff;
+            text-shadow: 0 0 20px #00ffff;
+        }
+
+        .team-status {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid #00ffff;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .status-card {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #00ffff;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .status-card h3 {
+            color: #00ffff;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .status-card .value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .challenges-section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 2em;
+            color: #00ffff;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        .challenges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .challenge-card {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid #00ffff;
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .challenge-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.3);
+        }
+
+        .challenge-card.locked {
+            opacity: 0.6;
+            border-color: #666666;
+        }
+
+        .challenge-card.completed {
+            border-color: #44ff44;
+            background: rgba(68, 255, 68, 0.1);
+        }
+
+        .challenge-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .challenge-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #00ffff;
+        }
+
+        .challenge-status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .status-available {
+            background: rgba(0, 255, 255, 0.2);
+            color: #00ffff;
+        }
+
+        .status-locked {
+            background: rgba(102, 102, 102, 0.2);
+            color: #666666;
+        }
+
+        .status-completed {
+            background: rgba(68, 255, 68, 0.2);
+            color: #44ff44;
+        }
+
+        .challenge-description {
+            color: #cccccc;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .challenge-progress {
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            background: rgba(0, 0, 0, 0.5);
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 5px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ffff, #0088ff);
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            font-size: 0.9em;
+            color: #cccccc;
+        }
+
+        .challenge-btn {
+            background: linear-gradient(45deg, #00ffff, #0088ff);
+            color: #000000;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            width: 100%;
+        }
+
+        .challenge-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.5);
+        }
+
+        .challenge-btn:disabled {
+            background: #666666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .leaderboard-preview {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid #00ffff;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .leaderboard-table th,
+        .leaderboard-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #333333;
+        }
+
+        .leaderboard-table th {
+            background: rgba(0, 255, 255, 0.2);
+            color: #00ffff;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .leaderboard-table tr:hover {
+            background: rgba(0, 255, 255, 0.1);
+        }
+
+        .rank-1 {
+            color: #ffff00;
+        }
+
+        .rank-2 {
+            color: #c0c0c0;
+        }
+
+        .rank-3 {
+            color: #cd7f32;
+        }
+
+        .view-full-btn {
+            background: transparent;
+            color: #00ffff;
+            border: 1px solid #00ffff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .view-full-btn:hover {
+            background: #00ffff;
+            color: #000000;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .status-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .challenges-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">🚀 The Oasis Protocol</div>
+            <div class="nav-links">
+                <a href="team-dashboard.html">Dashboard</a>
+                <a href="algorithmic-challenge.html">Challenges</a>
+                <a href="leaderboard.html">Leaderboard</a>
+                <a href="team-profile.html">Profile</a>
+            </div>
+            <div class="user-info">
+                <span id="teamName">Team CodeWarriors</span>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>Mission Control Dashboard</h1>
+            <p>Welcome back, Coders. The OASIS awaits your skills.</p>
+        </div>
+
+        <div class="team-status">
+            <div class="status-grid">
+                <div class="status-card">
+                    <h3>Current Rank</h3>
+                    <div class="value" id="currentRank">7</div>
+                </div>
+                <div class="status-card">
+                    <h3>Total Points</h3>
+                    <div class="value" id="totalPoints">2,450</div>
+                </div>
+                <div class="status-card">
+                    <h3>Challenges Completed</h3>
+                    <div class="value" id="completedChallenges">3/7</div>
+                </div>
+                <div class="status-card">
+                    <h3>Time Remaining</h3>
+                    <div class="value" id="timeRemaining">04:23:15</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="challenges-section">
+            <h2 class="section-title">Available Challenges</h2>
+            <div class="challenges-grid">
+                <div class="challenge-card completed">
+                    <div class="challenge-header">
+                        <div class="challenge-title">Challenge 1: Digital Fortress</div>
+                        <div class="challenge-status status-completed">Completed</div>
+                    </div>
+                    <div class="challenge-description">
+                        Crack the first layer of security to access the OASIS mainframe. 
+                        Solve the algorithmic puzzle and obtain the flag to unlock the buildathon phase.
+                    </div>
+                    <div class="challenge-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 100%"></div>
+                        </div>
+                        <div class="progress-text">Completed in 45 minutes</div>
+                    </div>
+                    <button class="challenge-btn" onclick="viewChallenge(1)">View Solution</button>
+                </div>
+
+                <div class="challenge-card completed">
+                    <div class="challenge-header">
+                        <div class="challenge-title">Challenge 2: Quantum Encryption</div>
+                        <div class="challenge-status status-completed">Completed</div>
+                    </div>
+                    <div class="challenge-description">
+                        Navigate through quantum-encrypted data structures. 
+                        Your algorithmic skills will be tested with complex data manipulation.
+                    </div>
+                    <div class="challenge-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 100%"></div>
+                        </div>
+                        <div class="progress-text">Completed in 1 hour 23 minutes</div>
+                    </div>
+                    <button class="challenge-btn" onclick="viewChallenge(2)">View Solution</button>
+                </div>
+
+                <div class="challenge-card">
+                    <div class="challenge-header">
+                        <div class="challenge-title">Challenge 3: Neural Network</div>
+                        <div class="challenge-status status-available">Available</div>
+                    </div>
+                    <div class="challenge-description">
+                        Implement a neural network to decode the AI's encrypted messages. 
+                        This challenge requires advanced algorithmic thinking and pattern recognition.
+                    </div>
+                    <div class="challenge-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 60%"></div>
+                        </div>
+                        <div class="progress-text">Algorithmic phase: 60% complete</div>
+                    </div>
+                    <button class="challenge-btn" onclick="startChallenge(3)">Continue Challenge</button>
+                </div>
+
+                <div class="challenge-card locked">
+                    <div class="challenge-header">
+                        <div class="challenge-title">Challenge 4: Blockchain Cipher</div>
+                        <div class="challenge-status status-locked">Locked</div>
+                    </div>
+                    <div class="challenge-description">
+                        Decrypt the blockchain-secured vault containing the next piece of the Master Key. 
+                        Complete Challenge 3 to unlock this challenge.
+                    </div>
+                    <div class="challenge-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%"></div>
+                        </div>
+                        <div class="progress-text">Unlock by completing Challenge 3</div>
+                    </div>
+                    <button class="challenge-btn" disabled>Locked</button>
+                </div>
+
+                <div class="challenge-card locked">
+                    <div class="challenge-header">
+                        <div class="challenge-title">Challenge 5: Quantum Entanglement</div>
+                        <div class="challenge-status status-locked">Locked</div>
+                    </div>
+                    <div class="challenge-description">
+                        Solve quantum entanglement puzzles to access the deeper layers of the OASIS. 
+                        Advanced quantum computing concepts required.
+                    </div>
+                    <div class="challenge-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%"></div>
+                        </div>
+                        <div class="progress-text">Requires Challenge 4 completion</div>
+                    </div>
+                    <button class="challenge-btn" disabled>Locked</button>
+                </div>
+
+                <div class="challenge-card locked">
+                    <div class="challenge-header">
+                        <div class="challenge-title">Final Challenge: Master Key</div>
+                        <div class="challenge-status status-locked">Locked</div>
+                    </div>
+                    <div class="challenge-description">
+                        The ultimate challenge. Combine all your skills to forge the Master Key 
+                        and restore the OASIS to its former glory.
+                    </div>
+                    <div class="challenge-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%"></div>
+                        </div>
+                        <div class="progress-text">Complete all challenges to unlock</div>
+                    </div>
+                    <button class="challenge-btn" disabled>Locked</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="leaderboard-preview">
+            <h2 class="section-title">Top Teams</h2>
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Team Name</th>
+                        <th>Points</th>
+                        <th>Challenges</th>
+                        <th>Last Submission</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="rank-1">🥇 1</td>
+                        <td>CyberPunks</td>
+                        <td>4,850</td>
+                        <td>5/7</td>
+                        <td>2 hours ago</td>
+                    </tr>
+                    <tr>
+                        <td class="rank-2">🥈 2</td>
+                        <td>QuantumCoders</td>
+                        <td>4,200</td>
+                        <td>4/7</td>
+                        <td>3 hours ago</td>
+                    </tr>
+                    <tr>
+                        <td class="rank-3">🥉 3</td>
+                        <td>NeuralNinjas</td>
+                        <td>3,950</td>
+                        <td>4/7</td>
+                        <td>4 hours ago</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>AlgorithmicAces</td>
+                        <td>3,100</td>
+                        <td>3/7</td>
+                        <td>1 hour ago</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>DataDragons</td>
+                        <td>2,750</td>
+                        <td>3/7</td>
+                        <td>5 hours ago</td>
+                    </tr>
+                </tbody>
+            </table>
+            <button class="view-full-btn" onclick="viewLeaderboard()">View Full Leaderboard</button>
+        </div>
+    </div>
+
+    <script>
+        // Timer functionality
+        function updateTimer() {
+            const timer = document.getElementById('timeRemaining');
+            const endTime = new Date().getTime() + (4 * 60 * 60 * 1000) + (23 * 60 * 1000) + (15 * 1000);
+            
+            function updateCountdown() {
+                const now = new Date().getTime();
+                const distance = endTime - now;
+                
+                if (distance < 0) {
+                    timer.textContent = "00:00:00";
+                    return;
+                }
+                
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                
+                timer.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+            
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+        }
+
+        // Navigation functions
+        function startChallenge(challengeId) {
+            window.location.href = `algorithmic-challenge.html?id=${challengeId}`;
+        }
+
+        function viewChallenge(challengeId) {
+            window.location.href = `algorithmic-challenge.html?id=${challengeId}&view=solution`;
+        }
+
+        function viewLeaderboard() {
+            window.location.href = 'leaderboard.html';
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                // Clear session data
+                sessionStorage.clear();
+                localStorage.clear();
+                window.location.href = 'team-register.html';
+            }
+        }
+
+        // Initialize dashboard
+        updateTimer();
+
+        // Simulate real-time updates
+        setInterval(() => {
+            const currentRank = document.getElementById('currentRank');
+            const totalPoints = document.getElementById('totalPoints');
+            
+            // Simulate small changes in rank and points
+            if (Math.random() < 0.3) {
+                const newRank = Math.max(1, parseInt(currentRank.textContent) + (Math.random() > 0.5 ? 1 : -1));
+                currentRank.textContent = newRank;
+            }
+            
+            if (Math.random() < 0.2) {
+                const newPoints = parseInt(totalPoints.textContent.replace(',', '')) + Math.floor(Math.random() * 50);
+                totalPoints.textContent = newPoints.toLocaleString();
+            }
+        }, 10000);
+    </script>
+</body>
+</html>

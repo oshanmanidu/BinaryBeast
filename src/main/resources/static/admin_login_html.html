@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Oasis Protocol</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a0033 0%, #2d0066 50%, #4a0099 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .login-container {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+        
+        .back-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: #ff00ff;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+        
+        .back-link:hover {
+            color: #ffffff;
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+        
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff00ff, #8000ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .form-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+        
+        .form-subtitle {
+            text-align: center;
+            color: #cccccc;
+            margin-bottom: 30px;
+        }
+        
+        .admin-badge {
+            background: linear-gradient(45deg, #ff00ff, #8000ff);
+            color: #ffffff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ffffff;
+            font-weight: 500;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #ff00ff;
+            box-shadow: 0 0 0 3px rgba(255, 0, 255, 0.1);
+        }
+        
+        .form-input::placeholder {
+            color: #888888;
+        }
+        
+        .login-button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #ff00ff, #8000ff);
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+        
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 0, 255, 0.3);
+        }
+        
+        .login-button:active {
+            transform: translateY(0);
+        }
+        
+        .error-message {
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 20px;
+            color: #ff6b6b;
+            display: none;
+        }
+        
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        
+        .security-notice {
+            background: rgba(255, 255, 0, 0.1);
+            border: 1px solid rgba(255, 255, 0, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 20px;
+            color: #fbbf24;
+            font-size: 0.9rem;
+        }
+        
+        .demo-credentials {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            color: #00d4ff;
+            font-size: 0.9rem;
+        }
+        
+        .demo-credentials h4 {
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+        
+        .demo-credentials code {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        
+        .admin-features {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .admin-features h4 {
+            color: #ff00ff;
+            margin-bottom: 10px;
+        }
+        
+        .admin-features ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .admin-features li {
+            padding: 3px 0;
+            color: #cccccc;
+            font-size: 0.9rem;
+        }
+        
+        .admin-features li:before {
+            content: "🛡️ ";
+            margin-right: 8px;
+        }
+        
+        @media (max-width: 768px) {
+            .login-container {
+                margin: 20px;
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-link">← Back to Home</a>
+    
+    <div class="login-container">
+        <div class="logo">
+            <div class="logo-icon">🛡️</div>
+            <div class="logo-text">ADMIN ACCESS</div>
+        </div>
+        
+        <div style="text-align: center;">
+            <span class="admin-badge">ADMINISTRATOR</span>
+        </div>
+        
+        <h1 class="form-title">Admin Portal</h1>
+        <p class="form-subtitle">Secure access to competition management</p>
+        
+        <div class="security-notice">
+            <strong>⚠️ Security Notice:</strong> This is a restricted area. Only authorized administrators should access this portal.
+        </div>
+        
+        <div class="demo-credentials">
+            <h4>Demo Credentials:</h4>
+            <p>Username: <code>admin</code></p>
+            <p>Password: <code>oasis2045</code></p>
+        </div>
+        
+        <div class="error-message" id="errorMessage">
+            Invalid credentials. Access denied.
+        </div>
+        
+        <form id="adminLoginForm">
+            <div class="form-group">
+                <label class="form-label" for="username">Username</label>
+                <input 
+                    type="text" 
+                    id="username" 
+                    name="username" 
+                    class="form-input" 
+                    placeholder="Enter admin username"
+                    required
+                    autocomplete="username"
+                >
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="password">Password</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    class="form-input" 
+                    placeholder="Enter admin password"
+                    required
+                    autocomplete="current-password"
+                >
+            </div>
+            
+            <button type="submit" class="login-button" id="loginButton">
+                Access Admin Panel
+            </button>
+        </form>
+        
+        <div class="admin-features">
+            <h4>Admin Panel Features:</h4>
+            <ul>
+                <li>Monitor platform activity</li>
+                <li>Manage challenges and problems</li>
+                <li>View team submissions</li>
+                <li>Access real-time leaderboard</li>
+                <li>Team management system</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const loginButton = document.getElementById('loginButton');
+            const errorMessage = document.getElementById('errorMessage');
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // Hide error message
+            errorMessage.style.display = 'none';
+            
+            // Show loading state
+            loginButton.textContent = 'Authenticating...';
+            loginButton.classList.add('loading');
+            
+            // Simulate login process
+            setTimeout(() => {
+                // Check demo credentials
+                if (username === 'admin' && password === 'oasis2045') {
+                    // Store admin session
+                    localStorage.setItem('adminUsername', username);
+                    localStorage.setItem('isAdminLoggedIn', 'true');
+                    localStorage.setItem('adminLoginTime', new Date().toISOString());
+                    
+                    // Redirect to admin dashboard
+                    window.location.href = 'admin-dashboard.html';
+                } else {
+                    // Show error
+                    errorMessage.style.display = 'block';
+                    loginButton.textContent = 'Access Admin Panel';
+                    loginButton.classList.remove('loading');
+                    
+                    // Clear form
+                    document.getElementById('password').value = '';
+                    document.getElementById('username').focus();
+                }
+            }, 1500);
+        });
+        
+        // Check if already logged in as admin
+        if (localStorage.getItem('isAdminLoggedIn') === 'true') {
+            // Check if session is still valid (optional: implement session timeout)
+            const loginTime = localStorage.getItem('adminLoginTime');
+            const now = new Date();
+            const sessionTime = new Date(loginTime);
+            const hoursDiff = (now - sessionTime) / (1000 * 60 * 60);
+            
+            if (hoursDiff < 24) { // 24 hour session
+                window.location.href = 'admin-dashboard.html';
+            } else {
+                // Session expired, clear storage
+                localStorage.removeItem('adminUsername');
+                localStorage.removeItem('isAdminLoggedIn');
+                localStorage.removeItem('adminLoginTime');
+            }
+        }
+    </script>
+</body>
+</html>

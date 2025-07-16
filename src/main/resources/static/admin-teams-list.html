@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Team Management | OASIS Protocol</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            color: #ffffff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, #00d4ff, #0099cc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .header .subtitle {
+            color: #a0a0a0;
+            font-size: 1.1rem;
+        }
+
+        .nav-bar {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 15px 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: rgba(0, 212, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .nav-links a.active {
+            background: linear-gradient(45deg, #00d4ff, #0099cc);
+            color: #000;
+        }
+
+        .logout-btn {
+            background: linear-gradient(45deg, #ff4757, #ff3838);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4);
+        }
+
+        .search-filter-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .search-controls {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            font-size: 1rem;
+        }
+
+        .search-box input::placeholder {
+            color: #a0a0a0;
+        }
+
+        .filter-select {
+            padding: 12px 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .filter-select option {
+            background: #1a1a2e;
+            color: #ffffff;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #00d4ff;
+        }
+
+        .stat-label {
+            color: #a0a0a0;
+            font-size: 0.9rem;
+        }
+
+        .teams-table {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .table-header {
+            background: linear-gradient(45deg, #00d4ff, #0099cc);
+            color: #000;
+            padding: 15px;
+            font-weight: bold;
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr 1fr 1fr 1fr;
+            gap: 15px;
+        }
+
+        .team-row {
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr 1fr 1fr 1fr;
+            gap: 15px;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .team-row:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateX(5px);
+        }
+
+        .team-name {
+            font-weight: bold;
+            color: #00d4ff;
+        }
+
+        .team-members {
+            color: #a0a0a0;
+            font-size: 0.9rem;
+        }
+
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            height: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #00d4ff, #0099cc);
+            transition: width 0.3s ease;
+        }
+
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .status-active {
+            background: linear-gradient(45deg, #2ed573, #26d0ce);
+            color: #000;
+        }
+
+        .status-inactive {
+            background: linear-gradient(45deg, #ff6b6b, #ff5252);
+            color: #fff;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .view-btn {
+            background: linear-gradient(45deg, #00d4ff, #0099cc);
+            color: #000;
+        }
+
+        .edit-btn {
+            background: linear-gradient(45deg, #ffa726, #ff9800);
+            color: #000;
+        }
+
+        .delete-btn {
+            background: linear-gradient(45deg, #ff4757, #ff3838);
+            color: #fff;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .pagination button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .pagination button:hover {
+            background: rgba(0, 212, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .pagination button.active {
+            background: linear-gradient(45deg, #00d4ff, #0099cc);
+            color: #000;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 50px;
+            color: #a0a0a0;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .search-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .stats-bar {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .table-header,
+            .team-row {
+                grid-template-columns: 1fr;
+                gap: 10px;
+                text-align: center;
+            }
+
+            .action-buttons {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-users"></i> OASIS Protocol Admin</h1>
+            <p class="subtitle">Team Management Dashboard</p>
+        </div>
+
+        <nav class="nav-bar">
+            <div class="nav-links">
+                <a href="admin-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                <a href="admin-challenges.html"><i class="fas fa-puzzle-piece"></i> Challenges</a>
+                <a href="admin-teams-list.html" class="active"><i class="fas fa-users"></i> Teams</a>
+            </div>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </nav>
+
+        <div class="search-filter-section">
+            <div class="search-controls">
+                <div class="search-box">
+                    <input type="text" id="searchTeams" placeholder="Search teams by name..." onkeyup="searchTeams()">
+                </div>
+                <select class="filter-select" id="statusFilter" onchange="filterTeams()">
+                    <option value="">All Teams</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+                <select class="filter-select" id="progressFilter" onchange="filterTeams()">
+                    <option value="">All Progress</option>
+                    <option value="0">Not Started</option>
+                    <option value="1-50">In Progress</option>
+                    <option value="51-100">Advanced</option>
+                    <option value="100">Completed</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-number" id="totalTeams">24</div>
+                <div class="stat-label">Total Teams</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="activeTeams">18</div>
+                <div class="stat-label">Active Teams</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="completedTeams">3</div>
+                <div class="stat-label">Completed</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="avgProgress">42%</div>
+                <div class="stat-label">Avg Progress</div>
+            </div>
+        </div>
+
+        <div class="teams-table">
+            <div class="table-header">
+                <div>Team Name</div>
+                <div>Members</div>
+                <div>Progress</div>
+                <div>Last Activity</div>
+                <div>Status</div>
+                <div>Actions</div>
+            </div>
+            <div id="teamsContainer">
+                <!-- Teams will be populated here -->
+            </div>
+        </div>
+
+        <div class="pagination" id="pagination">
+            <!-- Pagination will be populated here -->
+        </div>
+    </div>
+
+    <script>
+        // Sample team data
+        const teamsData = [
+            {
+                id: 1,
+                name: "Code Warriors",
+                members: ["John Doe", "Jane Smith", "Bob Johnson"],
+                progress: 85,
+                lastActivity: "2 hours ago",
+                status: "active",
+                submissions: 12
+            },
+            {
+                id: 2,
+                name: "Cyber Rebels",
+                members: ["Alice Brown", "Charlie Wilson"],
+                progress: 65,
+                lastActivity: "5 hours ago",
+                status: "active",
+                submissions: 8
+            },
+            {
+                id: 3,
+                name: "Digital Pioneers",
+                members: ["Eva Martinez", "David Lee", "Sarah Connor", "Mike Ross"],
+                progress: 92,
+                lastActivity: "1 hour ago",
+                status: "active",
+                submissions: 15
+            },
+            {
+                id: 4,
+                name: "Matrix Builders",
+                members: ["Neo Anderson", "Trinity"],
+                progress: 100,
+                lastActivity: "30 minutes ago",
+                status: "active",
+                submissions: 18
+            },
+            {
+                id: 5,
+                name: "Quantum Coders",
+                members: ["Peter Parker", "Mary Jane", "Harry Osborn"],
+                progress: 45,
+                lastActivity: "1 day ago",
+                status: "inactive",
+                submissions: 6
+            },
+            {
+                id: 6,
+                name: "Binary Breakers",
+                members: ["Bruce Wayne", "Clark Kent"],
+                progress: 78,
+                lastActivity: "3 hours ago",
+                status: "active",
+                submissions: 10
+            },
+            {
+                id: 7,
+                name: "Algorithm Aces",
+                members: ["Tony Stark", "Steve Rogers", "Natasha Romanoff"],
+                progress: 55,
+                lastActivity: "6 hours ago",
+                status: "active",
+                submissions: 7
+            },
+            {
+                id: 8,
+                name: "Debug Demons",
+                members: ["Hermione Granger", "Harry Potter"],
+                progress: 33,
+                lastActivity: "2 days ago",
+                status: "inactive",
+                submissions: 4
+            }
+        ];
+
+        let currentPage = 1;
+        const teamsPerPage = 5;
+        let filteredTeams = [...teamsData];
+
+        function displayTeams() {
+            const startIndex = (currentPage - 1) * teamsPerPage;
+            const endIndex = startIndex + teamsPerPage;
+            const teamsToShow = filteredTeams.slice(startIndex, endIndex);
+
+            const container = document.getElementById('teamsContainer');
+            
+            if (teamsToShow.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-search"></i>
+                        <h3>No teams found</h3>
+                        <p>Try adjusting your search or filter criteria</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = teamsToShow.map(team => `
+                <div class="team-row">
+                    <div class="team-name">${team.name}</div>
+                    <div class="team-members">${team.members.join(', ')}</div>
+                    <div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${team.progress}%"></div>
+                        </div>
+                        <div style="margin-top: 5px; font-size: 0.8rem; color: #a0a0a0;">${team.progress}%</div>
+                    </div>
+                    <div>${team.lastActivity}</div>
+                    <div>
+                        <span class="status-badge ${team.status === 'active' ? 'status-active' : 'status-inactive'}">
+                            ${team.status.toUpperCase()}
+                        </span>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn view-btn" onclick="viewTeamSubmissions(${team.id})">
+                            <i class="fas fa-eye"></i> View
+                        </button>
+                        <button class="action-btn edit-btn" onclick="editTeam(${team.id})">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="action-btn delete-btn" onclick="deleteTeam(${team.id})">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            updatePagination();
+        }
+
+        function updatePagination() {
+            const totalPages = Math.ceil(filteredTeams.length / teamsPerPage);
+            const pagination = document.getElementById('pagination');
+            
+            let paginationHTML = '';
+            
+            if (currentPage > 1) {
+                paginationHTML += `<button onclick="changePage(${currentPage - 1})">Previous</button>`;
+            }
+            
+            for (let i = 1; i <= totalPages; i++) {
+                paginationHTML += `<button class="${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
+            }
+            
+            if (currentPage < totalPages) {
+                paginationHTML += `<button onclick="changePage(${currentPage + 1})">Next</button>`;
+            }
+            
+            pagination.innerHTML = paginationHTML;
+        }
+
+        function changePage(page) {
+            currentPage = page;
+            displayTeams();
+        }
+
+        function searchTeams() {
+            const searchTerm = document.getElementById('searchTeams').value.toLowerCase();
+            applyFilters();
+        }
+
+        function filterTeams() {
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchTeams').value.toLowerCase();
+            const statusFilter = document.getElementById('statusFilter').value;
+            const progressFilter = document.getElementById('progressFilter').value;
+
+            filteredTeams = teamsData.filter(team => {
+                const matchesSearch = team.name.toLowerCase().includes(searchTerm) ||
+                                    team.members.some(member => member.toLowerCase().includes(searchTerm));
+                
+                const matchesStatus = !statusFilter || team.status === statusFilter;
+                
+                let matchesProgress = true;
+                if (progressFilter) {
+                    if (progressFilter === '0') {
+                        matchesProgress = team.progress === 0;
+                    } else if (progressFilter === '1-50') {
+                        matchesProgress = team.progress > 0 && team.progress <= 50;
+                    } else if (progressFilter === '51-100') {
+                        matchesProgress = team.progress > 50 && team.progress < 100;
+                    } else if (progressFilter === '100') {
+                        matchesProgress = team.progress === 100;
+                    }
+                }
+
+                return matchesSearch && matchesStatus && matchesProgress;
+            });
+
+            currentPage = 1;
+            updateStats();
+            displayTeams();
+        }
+
+        function updateStats() {
+            const totalTeams = filteredTeams.length;
+            const activeTeams = filteredTeams.filter(team => team.status === 'active').length;
+            const completedTeams = filteredTeams.filter(team => team.progress === 100).length;
+            const avgProgress = totalTeams > 0 ? Math.round(filteredTeams.reduce((sum, team) => sum + team.progress, 0) / totalTeams) : 0;
+
+            document.getElementById('totalTeams').textContent = totalTeams;
+            document.getElementById('activeTeams').textContent = activeTeams;
+            document.getElementById('completedTeams').textContent = completedTeams;
+            document.getElementById('avgProgress').textContent = avgProgress + '%';
+        }
+
+        function viewTeamSubmissions(teamId) {
+            window.location.href = `admin-team-submissions.html?teamId=${teamId}`;
+        }
+
+        function editTeam(teamId) {
+            alert(`Edit team functionality for team ID: ${teamId}`);
+        }
+
+        function deleteTeam(teamId) {
+            if (confirm('Are you sure you want to delete this team? This action cannot be undone.')) {
+                // Remove team from data
+                const index = teamsData.findIndex(team => team.id === teamId);
+                if (index > -1) {
+                    teamsData.splice(index, 1);
+                    applyFilters();
+                    alert('Team deleted successfully');
+                }
+            }
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.href = 'admin-login.html';
+            }
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            displayTeams();
+            updateStats();
+        });
+    </script>
+</body>
+</html>
