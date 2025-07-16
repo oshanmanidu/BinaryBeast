@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -84,7 +85,9 @@
             color: #ff4757;
         }
 
-        .form-input, .form-textarea, .form-select {
+        .form-input,
+        .form-textarea,
+        .form-select {
             width: 100%;
             padding: 12px;
             border: 2px solid rgba(255, 255, 255, 0.2);
@@ -95,12 +98,15 @@
             transition: border-color 0.3s ease;
         }
 
-        .form-input:focus, .form-textarea:focus, .form-select:focus {
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
             outline: none;
             border-color: #00f5ff;
         }
 
-        .form-input::placeholder, .form-textarea::placeholder {
+        .form-input::placeholder,
+        .form-textarea::placeholder {
             color: #b0b0b0;
         }
 
@@ -276,13 +282,14 @@
             .form-row {
                 grid-template-columns: 1fr;
             }
-            
+
             .form-actions {
                 flex-direction: column;
             }
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="header">
@@ -296,20 +303,25 @@
                 <div class="form-section">
                     <h2 class="section-title">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            <path
+                                d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                         </svg>
                         Challenge Information
                     </h2>
 
                     <div class="form-group">
-                        <label class="form-label" for="challengeTitle">Challenge Title <span class="required">*</span></label>
-                        <input type="text" id="challengeTitle" class="form-input" placeholder="Enter challenge title" required>
+                        <label class="form-label" for="challengeTitle">Challenge Title <span
+                                class="required">*</span></label>
+                        <input type="text" id="challengeTitle" class="form-input" placeholder="Enter challenge title"
+                            required>
                         <div class="help-text">A clear, descriptive title for your challenge</div>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label" for="challengeDescription">Description <span class="required">*</span></label>
-                        <textarea id="challengeDescription" class="form-textarea" placeholder="Describe the challenge objective and context" required></textarea>
+                        <label class="form-label" for="challengeDescription">Description <span
+                                class="required">*</span></label>
+                        <textarea id="challengeDescription" class="form-textarea"
+                            placeholder="Describe the challenge objective and context" required></textarea>
                         <div class="help-text">Provide context and objectives for participants</div>
                     </div>
 
@@ -322,8 +334,10 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="challengeFlag">Challenge Flag <span class="required">*</span></label>
-                            <input type="text" id="challengeFlag" class="form-input" placeholder="OASIS{your_flag_here}" required>
+                            <label class="form-label" for="challengeFlag">Challenge Flag <span
+                                    class="required">*</span></label>
+                            <input type="text" id="challengeFlag" class="form-input" placeholder="OASIS{your_flag_here}"
+                                required>
                             <div class="help-text">The flag that participants must discover</div>
                         </div>
                     </div>
@@ -333,19 +347,23 @@
                 <div class="form-section">
                     <h2 class="section-title">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0L19.2 12l-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/>
+                            <path
+                                d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0L19.2 12l-4.6-4.6L16 6l6 6-6 6-1.4-1.4z" />
                         </svg>
                         Algorithmic Problem
                     </h2>
 
                     <div class="form-group">
                         <label class="form-label" for="algoTitle">Problem Title <span class="required">*</span></label>
-                        <input type="text" id="algoTitle" class="form-input" placeholder="Enter algorithmic problem title" required>
+                        <input type="text" id="algoTitle" class="form-input"
+                            placeholder="Enter algorithmic problem title" required>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label" for="algoDescription">Problem Statement <span class="required">*</span></label>
-                        <textarea id="algoDescription" class="form-textarea" placeholder="Detailed problem description with examples" required></textarea>
+                        <label class="form-label" for="algoDescription">Problem Statement <span
+                                class="required">*</span></label>
+                        <textarea id="algoDescription" class="form-textarea"
+                            placeholder="Detailed problem description with examples" required></textarea>
                         <div class="help-text">Include problem statement, input/output format, and examples</div>
                     </div>
 
@@ -368,7 +386,8 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label class="form-label" for="algoMemoryLimit">Memory Limit (MB)</label>
-                            <input type="number" id="algoMemoryLimit" class="form-input" value="256" min="64" max="1024">
+                            <input type="number" id="algoMemoryLimit" class="form-input" value="256" min="64"
+                                max="1024">
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="algoLanguages">Allowed Languages</label>
@@ -385,7 +404,8 @@
 
                     <div class="form-group">
                         <label class="form-label" for="algoConstraints">Constraints</label>
-                        <textarea id="algoConstraints" class="form-textarea" placeholder="Input constraints and limitations"></textarea>
+                        <textarea id="algoConstraints" class="form-textarea"
+                            placeholder="Input constraints and limitations"></textarea>
                     </div>
 
                     <div class="form-group">
@@ -394,9 +414,11 @@
                             <div class="code-editor-header">
                                 <span class="code-editor-title">Input/Output Test Cases</span>
                             </div>
-                            <textarea id="algoTestCases" class="code-textarea" placeholder="Input:&#10;3&#10;1 2 3&#10;&#10;Expected Output:&#10;6&#10;&#10;Input:&#10;4&#10;1 2 3 4&#10;&#10;Expected Output:&#10;10"></textarea>
+                            <textarea id="algoTestCases" class="code-textarea"
+                                placeholder="Input:&#10;3&#10;1 2 3&#10;&#10;Expected Output:&#10;6&#10;&#10;Input:&#10;4&#10;1 2 3 4&#10;&#10;Expected Output:&#10;10"></textarea>
                         </div>
-                        <div class="help-text">Format: Input: [input] Expected Output: [output] (separate multiple test cases with blank lines)</div>
+                        <div class="help-text">Format: Input: [input] Expected Output: [output] (separate multiple test
+                            cases with blank lines)</div>
                     </div>
                 </div>
 
@@ -404,19 +426,23 @@
                 <div class="form-section">
                     <h2 class="section-title">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            <path
+                                d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                         </svg>
                         Buildathon Problem
                     </h2>
 
                     <div class="form-group">
                         <label class="form-label" for="buildTitle">Project Title <span class="required">*</span></label>
-                        <input type="text" id="buildTitle" class="form-input" placeholder="Enter buildathon project title" required>
+                        <input type="text" id="buildTitle" class="form-input"
+                            placeholder="Enter buildathon project title" required>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label" for="buildDescription">Project Description <span class="required">*</span></label>
-                        <textarea id="buildDescription" class="form-textarea" placeholder="Detailed project requirements and specifications" required></textarea>
+                        <label class="form-label" for="buildDescription">Project Description <span
+                                class="required">*</span></label>
+                        <textarea id="buildDescription" class="form-textarea"
+                            placeholder="Detailed project requirements and specifications" required></textarea>
                         <div class="help-text">Include project goals, requirements, and expected deliverables</div>
                     </div>
 
@@ -441,18 +467,21 @@
 
                     <div class="form-group">
                         <label class="form-label" for="buildTechnologies">Suggested Technologies</label>
-                        <input type="text" id="buildTechnologies" class="form-input" placeholder="React, Node.js, Python, etc. (comma-separated)">
+                        <input type="text" id="buildTechnologies" class="form-input"
+                            placeholder="React, Node.js, Python, etc. (comma-separated)">
                         <div class="help-text">Recommended technologies for the project</div>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label" for="buildRequirements">Technical Requirements</label>
-                        <textarea id="buildRequirements" class="form-textarea" placeholder="Specific technical requirements and constraints"></textarea>
+                        <textarea id="buildRequirements" class="form-textarea"
+                            placeholder="Specific technical requirements and constraints"></textarea>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label" for="buildEvaluation">Evaluation Criteria</label>
-                        <textarea id="buildEvaluation" class="form-textarea" placeholder="How will submissions be evaluated?"></textarea>
+                        <textarea id="buildEvaluation" class="form-textarea"
+                            placeholder="How will submissions be evaluated?"></textarea>
                     </div>
 
                     <div class="form-group">
@@ -513,7 +542,7 @@
         function initializePage() {
             const urlParams = new URLSearchParams(window.location.search);
             const challengeId = urlParams.get('id');
-            
+
             if (challengeId) {
                 isEditMode = true;
                 currentChallengeId = parseInt(challengeId);
@@ -566,10 +595,10 @@
 
         function handleSubmit(e) {
             e.preventDefault();
-            
+
             if (validateForm()) {
                 const formData = collectFormData();
-                
+
                 if (isEditMode) {
                     updateChallenge(formData);
                 } else {
@@ -590,11 +619,11 @@
             ];
 
             let isValid = true;
-            
+
             requiredFields.forEach(fieldId => {
                 const field = document.getElementById(fieldId);
                 const value = field.value.trim();
-                
+
                 if (!value) {
                     showFieldError(field, 'This field is required');
                     isValid = false;
@@ -709,68 +738,68 @@
                         .meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
                         .meta-item { background: #f8f9fa; padding: 10px; border-radius: 4px; }
                         .meta-label { font-weight: bold; color: #666; }
-                        .code-block { background: #f8f9fa; padding: 15px; border-radius: 4px; font-family: monospace; }
+                        .code-block { background: #f8f9fa; padding: 15px; border-radius: 4px; font-family: monospace; white-space: pre-wrap; }
                     </style>
                 </head>
                 <body>
                     <div class="preview-container">
-                        <h1>${data.title}</h1>
-                        <p>${data.description}</p>
+                        <h1>${data.title || ''}</h1>
+                        <p>${data.description || ''}</p>
                         
                         <div class="meta">
                             <div class="meta-item">
                                 <div class="meta-label">Status</div>
-                                <div>${data.status}</div>
+                                <div>${data.status || ''}</div>
                             </div>
                             <div class="meta-item">
                                 <div class="meta-label">Flag</div>
-                                <div>${data.flag}</div>
+                                <div>${data.flag || ''}</div>
                             </div>
                         </div>
 
                         <div class="section">
                             <h2>🔢 Algorithmic Problem</h2>
-                            <h3>${data.algorithmic.title}</h3>
-                            <p>${data.algorithmic.description}</p>
+                            <h3>${data.algorithmic?.title || ''}</h3>
+                            <p>${data.algorithmic?.description || ''}</p>
                             <div class="meta">
                                 <div class="meta-item">
                                     <div class="meta-label">Difficulty</div>
-                                    <div>${data.algorithmic.difficulty}</div>
+                                    <div>${data.algorithmic?.difficulty || ''}</div>
                                 </div>
                                 <div class="meta-item">
                                     <div class="meta-label">Time Limit</div>
-                                    <div>${data.algorithmic.timeLimit}s</div>
+                                    <div>${data.algorithmic?.timeLimit || ''}s</div>
                                 </div>
                                 <div class="meta-item">
                                     <div class="meta-label">Memory Limit</div>
-                                    <div>${data.algorithmic.memoryLimit}MB</div>
+                                    <div>${data.algorithmic?.memoryLimit || ''}MB</div>
                                 </div>
                             </div>
-                            ${data.algorithmic.constraints ? `<h4>Constraints:</h4><div class="code-block">${data.algorithmic.constraints}</div>` : ''}
-                            ${data.algorithmic.testCases ? `<h4>Test Cases:</h4><div class="code-block">${data.algorithmic.testCases}</div>` : ''}
+                            ${data.algorithmic?.constraints ? `<h4>Constraints:</h4><div class="code-block">${data.algorithmic.constraints.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>` : ''}
+                            ${data.algorithmic?.testCases ? `<h4>Test Cases:</h4><div class="code-block">${data.algorithmic.testCases.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>` : ''}
                         </div>
 
                         <div class="section">
                             <h2>🏗️ Buildathon Problem</h2>
-                            <h3>${data.buildathon.title}</h3>
-                            <p>${data.buildathon.description}</p>
+                            <h3>${data.buildathon?.title || ''}</h3>
+                            <p>${data.buildathon?.description || ''}</p>
                             <div class="meta">
                                 <div class="meta-item">
                                     <div class="meta-label">Category</div>
-                                    <div>${data.buildathon.category}</div>
+                                    <div>${data.buildathon?.category || ''}</div>
                                 </div>
                                 <div class="meta-item">
                                     <div class="meta-label">Duration</div>
-                                    <div>${data.buildathon.duration} hours</div>
+                                    <div>${data.buildathon?.duration || ''} hours</div>
                                 </div>
                                 <div class="meta-item">
                                     <div class="meta-label">Demo Required</div>
-                                    <div>${data.buildathon.requiresDemo ? 'Yes' : 'No'}</div>
+                                    <div>${data.buildathon?.requiresDemo ? 'Yes' : 'No'}</div>
                                 </div>
                             </div>
-                            ${data.buildathon.technologies ? `<h4>Technologies:</h4><p>${data.buildathon.technologies}</p>` : ''}
-                            ${data.buildathon.requirements ? `<h4>Requirements:</h4><div class="code-block">${data.buildathon.requirements}</div>` : ''}
-                            ${data.buildathon.evaluation ? `<h4>Evaluation:</h4><div class="code-block">${data.buildathon.evaluation}</div>` : ''}
+                            ${data.buildathon?.technologies ? `<h4>Technologies:</h4><p>${data.buildathon.technologies.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</p>` : ''}
+                            ${data.buildathon?.requirements ? `<h4>Requirements:</h4><div class="code-block">${data.buildathon.requirements.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>` : ''}
+                            ${data.buildathon?.evaluation ? `<h4>Evaluation:</h4><div class="code-block">${data.buildathon.evaluation.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>` : ''}
                         </div>
                     </div>
                 </body>
@@ -782,7 +811,7 @@
             const toast = document.getElementById('toast');
             toast.textContent = message;
             toast.className = `toast toast-${type} show`;
-            
+
             setTimeout(() => {
                 toast.classList.remove('show');
             }, 3000);
@@ -792,4 +821,5 @@
         initializePage();
     </script>
 </body>
+
 </html>
