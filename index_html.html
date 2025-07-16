@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Oasis Protocol - Welcome</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 40px 0;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .logo {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #00d4ff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            color: #cccccc;
+            margin-bottom: 30px;
+        }
+        
+        .hero {
+            padding: 60px 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #00d4ff;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+        
+        .hero p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            color: #cccccc;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 60px;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            min-width: 200px;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #00d4ff, #0099cc);
+            color: #ffffff;
+            border: none;
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(45deg, #ff00ff, #cc00cc);
+            color: #ffffff;
+            border: none;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            color: #00d4ff;
+            border: 2px solid #00d4ff;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        .feature-card h3 {
+            color: #00d4ff;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .feature-card p {
+            color: #cccccc;
+            line-height: 1.6;
+        }
+        
+        .countdown {
+            text-align: center;
+            padding: 40px 0;
+            background: rgba(255, 0, 255, 0.1);
+            border-radius: 15px;
+            margin-bottom: 60px;
+        }
+        
+        .countdown h2 {
+            color: #ff00ff;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
+        .countdown-timer {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .time-unit {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            min-width: 80px;
+        }
+        
+        .time-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #00d4ff;
+        }
+        
+        .time-label {
+            font-size: 0.9rem;
+            color: #cccccc;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 40px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #888888;
+        }
+        
+        .admin-link {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: #888888;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+        
+        .admin-link:hover {
+            color: #00d4ff;
+        }
+        
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2rem;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="admin-login.html" class="admin-link">Admin Login</a>
+    
+    <div class="header">
+        <div class="container">
+            <div class="logo">🌐 OASIS PROTOCOL</div>
+            <div class="tagline">Ready Player One • Buildathon 2045</div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <section class="hero">
+            <h1>The OASIS Has Gone Dark</h1>
+            <p>
+                In the year 2045, the OASIS—a vast virtual world—has gone dark. An anonymous force has encrypted the Master Key needed to reboot the system. Only the most skilled coders can decode the layers of security and unlock the final Builder Challenge to restore the OASIS to its former glory.
+            </p>
+            <p>
+                Your team is the last hope. Crack the layers of security, rebuild the platform, and restore the OASIS.
+            </p>
+            
+            <div class="cta-buttons">
+                <a href="team-register.html" class="btn btn-primary">Join the Battle</a>
+                <a href="team-login.html" class="btn btn-secondary">Team Login</a>
+                <a href="leaderboard.html" class="btn btn-outline">View Leaderboard</a>
+            </div>
+        </section>
+        
+        <section class="countdown">
+            <h2>⏰ Time Until OASIS Restoration</h2>
+            <div class="countdown-timer">
+                <div class="time-unit">
+                    <div class="time-number" id="days">00</div>
+                    <div class="time-label">Days</div>
+                </div>
+                <div class="time-unit">
+                    <div class="time-number" id="hours">00</div>
+                    <div class="time-label">Hours</div>
+                </div>
+                <div class="time-unit">
+                    <div class="time-number" id="minutes">00</div>
+                    <div class="time-label">Minutes</div>
+                </div>
+                <div class="time-unit">
+                    <div class="time-number" id="seconds">00</div>
+                    <div class="time-label">Seconds</div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="features">
+            <div class="feature-card">
+                <div class="feature-icon">💻</div>
+                <h3>Algorithmic Challenges</h3>
+                <p>Solve complex coding problems to unlock flags and progress through security layers. Use our integrated code editor with Judge0 execution.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🏗️</div>
+                <h3>Buildathon Projects</h3>
+                <p>Once you crack the algorithmic code, build innovative solutions to restore OASIS functionality. Submit your GitHub repositories.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🏆</div>
+                <h3>Real-time Leaderboard</h3>
+                <p>Track your progress against other teams in real-time. Compete for the top spot and ultimate control of the OASIS.</p>
+            </div>
+        </section>
+    </div>
+    
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2045 OASIS Protocol Buildathon. Ready Player One.</p>
+        </div>
+    </footer>
+    
+    <script>
+        // Simple countdown timer (you can set your target date)
+        function updateCountdown() {
+            const targetDate = new Date('2024-12-31T23:59:59').getTime();
+            const now = new Date().getTime();
+            const difference = targetDate - now;
+            
+            if (difference > 0) {
+                const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+                
+                document.getElementById('days').textContent = days.toString().padStart(2, '0');
+                document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+                document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+                document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+            } else {
+                document.getElementById('days').textContent = '00';
+                document.getElementById('hours').textContent = '00';
+                document.getElementById('minutes').textContent = '00';
+                document.getElementById('seconds').textContent = '00';
+            }
+        }
+        
+        // Update countdown every second
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+    </script>
+</body>
+</html>
